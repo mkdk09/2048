@@ -13,6 +13,21 @@ let cells = [];
 let fontSize;
 let loss = false;
 
+changeSize.onclick = function () {
+    if (sizeInput.value >= 2 && sizeInput.value <= 20) {
+        size = sizeInput.value;
+        width = canvas.width / size - 6;
+        canvasClear();
+        canvas.style.opacity = "1.0";
+        loss = false;
+        startGame();
+    }
+};
+
+function canvasClear() {
+    ctx.clearRect(0, 0, 500, 500);
+};
+
 startGame();
 
 function startGame() {
@@ -77,6 +92,20 @@ function drawAllCells() {
 };
 
 function pasteNewCell() {
+    let countFree = 0;
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            if (!cells[i][j].value) {
+                countFree++;
+            }
+        }
+    }
+
+    if (!countFree) {
+        finishGame();
+        return;
+    }
+
     while (true){
         let row = Math.floor(Math.random() * size);
         let coll = Math.floor(Math.random() * size);
@@ -196,4 +225,9 @@ function moveLeft() {
         }
     }
     pasteNewCell();
+};
+
+function finishGame() {
+    canvas.style.opacity = "0.5";
+    loss = true;
 };
